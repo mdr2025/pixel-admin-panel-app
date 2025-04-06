@@ -8,7 +8,12 @@ use App\Http\Requests\CompanyModule\ChangeCompanyStatusRequest;
 use App\Models\CompanyModule\TenantCompany;
 use App\Services\CompanyModule\CompanyChangeListStatusService;
 use App\Services\CompanyModule\CompanyChangeRegisterStatusService;
+use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\CompanyAccountStatusChanger;
+use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\SignUpCompanyStatusChangerServices\SignUpAccountApprovingService;
+use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\SignUpCompanyStatusChangerServices\SignUpAccountRejectingService;
+use App\Services\CompanyModule\TenantCompanyDefaultAdminEmailChangingService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use PixelApp\Http\Resources\AuthenticationResources\CompanyAuthenticationResources\ModelsResources\TenantCompanyResource;
@@ -85,14 +90,19 @@ class CompanyManagementController extends Controller
         return Response::success(['list' => $data, 'statistics' => []]);
     }
 
-    function updateRegisterStatus(ChangeCompanyStatusRequest $request)
+    public function approveComapny(int $companyId) : JsonResponse
     {
-        return (new CompanyChangeRegisterStatusService($request))->update();
+        return (new SignUpAccountApprovingService($companyId))->change();
     }
 
-    function updateCompanyListStatus(ChangeCompanyListStatusRequest $request)
+    public function rejectCompany(int $companyId) : JsonResponse
     {
-        return (new CompanyChangeListStatusService($request))->update();
+        return (new SignUpAccountRejectingService($companyId))->change();
+    }
+
+    function changeCompanyListStatus(int $companyId)
+    {
+        return (new CompanyAccountStatusChanger($companyId))->change();
     }
   
     // public function show(Request $request)
@@ -141,15 +151,10 @@ class CompanyManagementController extends Controller
     //     return response()->json($response, 200);
     // }
 
-//    function updateCompanyEmail($id, CompanyEmailRequest $request)
-//    {
-//        $data = $request->all();
-//        $company = TenantCompany::findOrFail($id)->update(['admin_email' => $request->admin_email]);
-//        event(new ResendEmailTokenEvent($company));
-//        return response()->json([
-//            "message" => "sent"
-//        ]);
-//    }
+   function updateCompanyEmail(int $companyId)
+   {
+       return (new TenantCompanyDefaultAdminEmailChangingService($companyId))->change(); 
+   }
 
 //    function resendEmailVerify(CompanyEmailRequest $request)
 //    {

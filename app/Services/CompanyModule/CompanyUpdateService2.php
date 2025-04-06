@@ -3,34 +3,16 @@
 namespace App\Services\CompanyModule;
 
 use App\Models\CompanyModule\TenantCompany;
-use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\UpdatingServices\UpdatingService;
 use PixelApp\Helpers\PixelGlobalHelpers;
 
-class CompanyUpdateService extends UpdatingService
+class CompanyUpdateService2
 {
-
     protected $company, $request;
     function __construct($request)
     {
         $this->company = TenantCompany::find($request->id);
         $this->request = $request->except($this->company->exceptData);
     }
-
-    protected function se
-    
-    protected function getRequestClass() : string
-    {
-
-    }
-    protected function getModelUpdatingFailingErrorMessage():string
-    {
-
-    }
-
-    protected function getModelUpdatingSuccessMessage():string
-    {
-    }
-
 
     function updateCompany()
     {

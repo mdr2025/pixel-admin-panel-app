@@ -20,8 +20,9 @@ class CompanyChangeRegisterStatusService
 
     function generateCompanyId()
     {
-        $companyId = 'CO-' . random_int(100000, 999999);
-        if (!$this->company->company_id) {
+        if (!$this->company->company_id) 
+        {
+            $companyId = 'CO-' . random_int(100000, 999999);
             if (codeExists($companyId, 'company_id')) {
                 return $this->generateCompanyId();
             }

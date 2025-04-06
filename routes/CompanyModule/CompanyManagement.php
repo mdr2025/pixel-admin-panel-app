@@ -9,8 +9,9 @@ Route::controller(CompanyManagementController::class)->prefix('company')->group(
     // Route::get('hidden-list', 'companyHiddenList');
     Route::delete('hide/{company}', 'hide');
     Route::delete('delete/{company}', 'delete');
-    Route::put('update-register-status', 'updateRegisterStatus');
-    Route::put('update-list-status', 'updateCompanyListStatus');
-    // Route::put('updateEmail/{company_id}', 'updateCompanyEmail');
+    Route::put('signup-list/approve/{companyId}',  'aapproveComapny' );
+    Route::put('signup-list/reject/{companyId}',   'rejectCompany' );
+    Route::put('update-list-status/{companyId}', 'changeCompanyListStatus');
+    Route::put('updateEmail/{companyId}', 'updateCompanyEmail');
     // Route::post('resendEmailVerify', 'resendEmailVerify');
 });
