@@ -3009,16 +3009,16 @@
         },
         {
             "name": "mdr2025/pixel-app",
-            "version": "1.0.24",
+            "version": "1.0.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdr2025/pixel-app.git",
-                "reference": "b8a78cb09dc97bc4bff29ad6b84de8b7d5ae4385"
+                "reference": "23e8a22034c02a1746c5f84b38f9cd2387794809"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdr2025/pixel-app/zipball/b8a78cb09dc97bc4bff29ad6b84de8b7d5ae4385",
-                "reference": "b8a78cb09dc97bc4bff29ad6b84de8b7d5ae4385",
+                "url": "https://api.github.com/repos/mdr2025/pixel-app/zipball/23e8a22034c02a1746c5f84b38f9cd2387794809",
+                "reference": "23e8a22034c02a1746c5f84b38f9cd2387794809",
                 "shasum": ""
             },
             "require": {
@@ -3079,10 +3079,10 @@
             ],
             "description": "PixelApp package",
             "support": {
-                "source": "https://github.com/mdr2025/pixel-app/tree/1.0.24",
+                "source": "https://github.com/mdr2025/pixel-app/tree/1.0.25",
                 "issues": "https://github.com/mdr2025/pixel-app/issues"
             },
-            "time": "2025-04-06T03:58:32+00:00"
+            "time": "2025-04-07T04:15:35+00:00"
         },
         {
             "name": "monolog/monolog",

@@ -3,21 +3,16 @@
 namespace App\Http\Controllers\CompanyModule;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CompanyModule\ChangeCompanyListStatusRequest;
-use App\Http\Requests\CompanyModule\ChangeCompanyStatusRequest;
 use App\Models\CompanyModule\TenantCompany;
-use App\Services\CompanyModule\CompanyChangeListStatusService;
-use App\Services\CompanyModule\CompanyChangeRegisterStatusService;
+use App\Services\CompanyModule\CompanyDefaultAdminServices\DefaultAdminVerificationNotificationResendingService;
+use App\Services\CompanyModule\CompanyDefaultAdminServices\TenantCompanyDefaultAdminEmailChangingService;
 use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\CompanyAccountStatusChanger;
 use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\SignUpCompanyStatusChangerServices\SignUpAccountApprovingService;
 use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\SignUpCompanyStatusChangerServices\SignUpAccountRejectingService;
-use App\Services\CompanyModule\TenantCompanyDefaultAdminEmailChangingService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use PixelApp\Http\Resources\AuthenticationResources\CompanyAuthenticationResources\ModelsResources\TenantCompanyResource;
-use PixelApp\Http\Resources\SingleResource;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -100,7 +95,7 @@ class CompanyManagementController extends Controller
         return (new SignUpAccountRejectingService($companyId))->change();
     }
 
-    function changeCompanyListStatus(int $companyId)
+    function changeCompanyListStatus(int $companyId): JsonResponse
     {
         return (new CompanyAccountStatusChanger($companyId))->change();
     }
@@ -114,9 +109,9 @@ class CompanyManagementController extends Controller
     //     return new SingleResource($item);
     // }
 
-    public function hide($id)
+    public function hide($companyId)
     {
-        $company = TenantCompany::findOrFail($id);
+        $company = TenantCompany::findOrFail($companyId);
         $company->delete();
 
         $response = [
@@ -126,9 +121,9 @@ class CompanyManagementController extends Controller
         return response()->json($response, 200);
     }
 
-    public function delete($id)
+    public function delete($companyId)
     {
-        $company = TenantCompany::withTrashed()->find($id)->forceDelete();
+        $company = TenantCompany::withTrashed()->find($companyId)->forceDelete();
 
         $response = [
             "message" => "Deleted Successfully",
@@ -151,17 +146,13 @@ class CompanyManagementController extends Controller
     //     return response()->json($response, 200);
     // }
 
-   function updateCompanyEmail(int $companyId)
+   function updateCompanyEmail(int $companyId): JsonResponse
    {
        return (new TenantCompanyDefaultAdminEmailChangingService($companyId))->change(); 
    }
 
-//    function resendEmailVerify(CompanyEmailRequest $request)
-//    {
-//        $company = TenantCompany::whereAdminEmail($request->admin_email)->first();
-//        event(new ResendEmailTokenEvent($company));
-//        return response()->json([
-//            "message" => "sent"
-//        ]);
-//    }
+   function resendDefaultAdminEmailVerification(int $companyId): JsonResponse
+   {
+        return (new DefaultAdminVerificationNotificationResendingService($companyId))->resend();
+   }
 }

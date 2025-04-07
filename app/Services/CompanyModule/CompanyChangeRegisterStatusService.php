@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use PixelApp\Helpers\PixelGlobalHelpers;
 use Throwable;
 
+/**
+ * for remove later
+ */
 class CompanyChangeRegisterStatusService
 {
     protected $company, $request;
