@@ -909,16 +909,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.11.0",
+            "version": "v6.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "8f718f4dfc9c5d5f0c994cdfd103921b43592712"
+                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/8f718f4dfc9c5d5f0c994cdfd103921b43592712",
-                "reference": "8f718f4dfc9c5d5f0c994cdfd103921b43592712",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
                 "shasum": ""
             },
             "require": {
@@ -966,9 +966,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.11.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.11.1"
             },
-            "time": "2025-01-23T05:11:06+00:00"
+            "time": "2025-04-09T20:32:01+00:00"
         },
         {
             "name": "fruitcake/laravel-cors",
@@ -2021,16 +2021,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.6.1",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "d990688c91cedfb69753ffc2512727ec646df2ad"
+                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/d990688c91cedfb69753ffc2512727ec646df2ad",
-                "reference": "d990688c91cedfb69753ffc2512727ec646df2ad",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/06c3b0bf2540338094575612f4a1778d0d2d5e94",
+                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94",
                 "shasum": ""
             },
             "require": {
@@ -2124,7 +2124,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-29T14:10:59+00:00"
+            "time": "2025-04-18T21:09:27+00:00"
         },
         {
             "name": "league/config",
@@ -3009,16 +3009,16 @@
         },
         {
             "name": "mdr2025/pixel-app",
-            "version": "1.0.25",
+            "version": "1.0.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mdr2025/pixel-app.git",
-                "reference": "23e8a22034c02a1746c5f84b38f9cd2387794809"
+                "reference": "88849db4c6dfc6c3ddcfdb08a2796ec7cc7fdb84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mdr2025/pixel-app/zipball/23e8a22034c02a1746c5f84b38f9cd2387794809",
-                "reference": "23e8a22034c02a1746c5f84b38f9cd2387794809",
+                "url": "https://api.github.com/repos/mdr2025/pixel-app/zipball/88849db4c6dfc6c3ddcfdb08a2796ec7cc7fdb84",
+                "reference": "88849db4c6dfc6c3ddcfdb08a2796ec7cc7fdb84",
                 "shasum": ""
             },
             "require": {
@@ -3079,10 +3079,10 @@
             ],
             "description": "PixelApp package",
             "support": {
-                "source": "https://github.com/mdr2025/pixel-app/tree/1.0.25",
+                "source": "https://github.com/mdr2025/pixel-app/tree/1.0.38",
                 "issues": "https://github.com/mdr2025/pixel-app/issues"
             },
-            "time": "2025-04-07T04:15:35+00:00"
+            "time": "2025-04-22T06:41:09+00:00"
         },
         {
             "name": "monolog/monolog",

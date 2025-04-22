@@ -4,7 +4,8 @@ namespace App\Services\CompanyModule\CompanyDefaultAdminServices;
 
 use App\Models\CompanyModule\TenantCompany;
 use Exception;
-use PixelApp\Http\Requests\UserManagementRequests\CompanyDefaultAdminChangeEmailRequest;
+use PixelApp\CustomLibs\Tenancy\PixelTenancyManager;
+use  App\Http\Requests\CompanyModule\CompanyDefaultAdminChangeEmailRequest;
 use PixelApp\Models\CompanyModule\CompanyDefaultAdmin;
 use PixelApp\Services\UserEncapsulatedFunc\EmailAuthenticatableFuncs\EmailChangerService\EmailChangerService as BaseEmailChangerService;
 use PixelApp\Events\TenancyEvents\TenantCompanyEvents\TenantDefaultAdminNewEmailHavingEvent;
@@ -24,6 +25,8 @@ class TenantCompanyDefaultAdminEmailChangingService  extends BaseEmailChangerSer
         
         parent::__construct($defaultAdmin);
 
+        $this->catchModelEmailOldValue();
+
     }
 
     protected function setTenantCompany($companyId) : void
@@ -41,14 +44,32 @@ class TenantCompanyDefaultAdminEmailChangingService  extends BaseEmailChangerSer
         return CompanyDefaultAdminChangeEmailRequest::class ;
     }
 
-    protected function fireCommittingEvents() : void
+    protected function catchModelEmailOldValue() : void
     {
+        $emailKey =  $this->model->getEmailColumnName();
+        $this->model->catchKeyValueTemporarlly($emailKey);
+    }
+
+   protected function syncDataWithTenantApp() : void
+   { 
+        PixelTenancyManager::handleTenancySyncingData($this->model);  
+   }
+
+   protected function fireEmailChangingEvent() : void
+   {
         $tenant = $this->tenant;
 
+        //will fire an event f email has changed only
         $this->emailChanger->callOnEmailChange(function() use ($tenant)
         {
             event(new TenantDefaultAdminNewEmailHavingEvent($tenant));
         });
+   }
+
+    protected function fireCommittingEvents() : void
+    {
+        $this->syncDataWithTenantApp();
+        $this->fireEmailChangingEvent();
     }
 
 }

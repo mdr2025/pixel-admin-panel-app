@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CompanyModule;
 
 use App\Http\Controllers\Controller;
 use App\Models\CompanyModule\TenantCompany;
+use App\Models\UsersModule\User;
 use App\Services\CompanyModule\CompanyDefaultAdminServices\DefaultAdminVerificationNotificationResendingService;
 use App\Services\CompanyModule\CompanyDefaultAdminServices\TenantCompanyDefaultAdminEmailChangingService;
 use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\CompanyAccountStatusChanger;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use PixelApp\Http\Resources\AuthenticationResources\CompanyAuthenticationResources\ModelsResources\TenantCompanyResource;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -20,6 +22,7 @@ class CompanyManagementController extends Controller
 {
     function signupList(Request $request)
     {
+
         $data = QueryBuilder::for(TenantCompany::class)->with('contacts')
             ->allowedFilters([
                 AllowedFilter::callback('name', function (Builder $query, $value) {
@@ -35,9 +38,9 @@ class CompanyManagementController extends Controller
                 AllowedFilter::exact('first_name'),
                 AllowedFilter::exact('last_name'),
                 AllowedFilter::exact('admin_email'),
-                AllowedFilter::exact('registration_status')
+                AllowedFilter::exact('status')
             ])
-            ->where('registration_status', 'pending')
+            ->where('status', 'pending')
             ->when($request->has('filter.email_verified_at'), function ($query) use ($request) {
                 if ($request->input('filter.email_verified_at') == 'verified') {
                     return $query->whereNotNull('email_verified_at');
@@ -70,11 +73,10 @@ class CompanyManagementController extends Controller
                     'first_name',
                     'last_name',
                     'admin_email',
-                    'registration_status',
-                    'is_active',
+                    'status',
                     // 'country.name',
                     'branches_no',
-                    'company_domain',
+                    'domain',
                     'package_status'
                 ]
             )
@@ -100,14 +102,15 @@ class CompanyManagementController extends Controller
         return (new CompanyAccountStatusChanger($companyId))->change();
     }
   
-    // public function show(Request $request)
-    // {
-    //     return (new TenantCompanyResource( tenant() ));
+    public function show(int $companyId)
+    { 
+        $tenant = TenantCompany::findOrFail($companyId);
+        return (new TenantCompanyResource($tenant ));
 
-    //     $token = $request->bearerToken();
-    //     $item = TenantCompany::with( 'country')->where('verification_token' , $token)->get();
-    //     return new SingleResource($item);
-    // }
+        // $token = $request->bearerToken();
+        // $item = TenantCompany::with( 'country')->where('verification_token' , $token)->get();
+        // return new SingleResource($item);
+    }
 
     public function hide($companyId)
     {

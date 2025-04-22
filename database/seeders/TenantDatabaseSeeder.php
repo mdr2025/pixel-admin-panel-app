@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
  
-use Illuminate\Database\Seeder;
 use PixelApp\Database\Seeders\GeneralSeeders\AllLocationDataDatabaseSeeder;
+use Illuminate\Database\Seeder; 
 use PixelApp\Database\Seeders\SystemConfigSeeders\DropdownListSeeders\DepartmentsTableSeeder;
 use PixelApp\Database\Seeders\SystemConfigSeeders\RolesAndPermissionsSeeders\PermissionsSeeder;
 use PixelApp\Database\Seeders\SystemConfigSeeders\RolesAndPermissionsSeeders\RolesSeeder;
+use PixelApp\Database\Seeders\SystemConfigSeeders\DropdownListSeeders\BranchesSeeder;
 
-class DatabaseSeeder extends Seeder
+class TenantDatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -22,6 +23,10 @@ class DatabaseSeeder extends Seeder
             PermissionsSeeder::class,
             RolesSeeder::class,
             DepartmentsTableSeeder::class,
+            // BranchesSeeder::class,
+//            SignUpUserSeeder::class,
+//            AcceptedUserSeeder::class,
+//            
         ]);
     }
 }

@@ -28,7 +28,7 @@ class SignUpAccountApprovingService extends BaseSignUpAccountApprovingService
      * @return bool
      */
     protected function sendStatusChangingNotification(): void
-    { 
+    {  
         event(new TenantCompanyApproved($this->model));
     }
 }

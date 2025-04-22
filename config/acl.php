@@ -2,6 +2,10 @@
 
 use PixelApp\Models\SystemConfigurationModels\RoleModel;
 
+$acl = [];
+$highestRoleName = RoleModel::getHighestRoleName();
+$lowestRoleName = RoleModel::getLowestRoleName();
+
 $highestRolePermisions = [
                                 ///////// system configurations /////////////
                                 "read_sc-dropdown-lists",
@@ -36,9 +40,13 @@ $highestRolePermisions = [
                                 "read-branch_company-account",
                                 "edit-branch_company-account"
                             ];
+
+
 $lowestRolePermisions = ["read_profile"];
-$acl = [];
-$acl["permissions"][RoleModel::getHighestRoleName()] = $highestRolePermisions;
-$acl["permissions"][RoleModel::getLowestRoleName()] = $lowestRolePermisions;
+
+$acl["permissions"][$highestRoleName] = $highestRolePermisions;
+$acl["permissions"][$lowestRoleName] = $lowestRolePermisions;
+$acl["roles"] = [$highestRoleName , $lowestRoleName];
+$acl["default_roles"] = [$highestRoleName , $lowestRoleName];
 
 return $acl;

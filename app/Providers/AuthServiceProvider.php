@@ -42,9 +42,7 @@ class AuthServiceProvider extends ServiceProvider
 
     protected function completePassportRegistrations() : void
     {
-         /**
-          * @todo later
-          */
+        Passport::ignoreMigrations();
     }
 
 

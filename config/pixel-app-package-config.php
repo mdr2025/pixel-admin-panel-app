@@ -1,4 +1,9 @@
-<?php return array (
+<?php
+
+use App\Models\CompanyModule\TenantCompany;
+use App\Models\UsersModule\User;
+
+ return array (
   'pixel-app-type' => 'admin-panel-app',
   'pixel-app-package-route-registrars' => 
   array (
@@ -28,4 +33,6 @@
     5 => 'PixelApp\\PixelMacroableExtenders\\PixelReponseExtender',
   ),
   'pixel-tenancy-service-provider-class' => 'PixelApp\\ServiceProviders\\RelatedPackagesServiceProviders\\TenancyServiceProvider',
+  'tenant-company-model-class' => TenantCompany::class,
+  'user-model-class' => User::class
 ) ;

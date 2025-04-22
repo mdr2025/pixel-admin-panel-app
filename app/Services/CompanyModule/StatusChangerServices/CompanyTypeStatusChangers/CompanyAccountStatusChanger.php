@@ -3,7 +3,7 @@
 namespace  App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers;
 
 use App\Models\CompanyModule\TenantCompany;
-use PixelApp\Http\Requests\UserManagementRequests\CompanyStatusUpdatingRequest; 
+use App\Http\Requests\CompanyModule\CompanyStatusUpdatingRequest;
 use PixelApp\Services\UserEncapsulatedFunc\EmailAuthenticatableFuncs\StatusChangeableStatusChangers\StatusChangerTypes\SystemMemberAccountStatusChanger;
 
 class CompanyAccountStatusChanger extends SystemMemberAccountStatusChanger

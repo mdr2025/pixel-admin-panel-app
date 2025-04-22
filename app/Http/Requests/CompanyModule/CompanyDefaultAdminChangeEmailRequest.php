@@ -1,6 +1,6 @@
 <?php
 
-namespace PixelApp\Http\Requests\UserManagementRequests;
+namespace App\Http\Requests\CompanyModule;
 
  
 use ValidatorLib\CustomFormRequest\BaseFormRequest;

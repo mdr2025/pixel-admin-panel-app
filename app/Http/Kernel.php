@@ -7,6 +7,7 @@ use PixelApp\Http\Middleware\AliassedMiddlewares\Cors;
 use PixelApp\Http\Middleware\AliassedMiddlewares\ProtectFilesMidlleware;
 use PixelApp\Http\Middleware\AliassedMiddlewares\RateLimitingMiddleware;
 
+use Illuminate\Routing\Middleware\ThrottleRequests;
 class Kernel extends HttpKernel
 {
     /**
@@ -26,7 +27,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
 
         //custom middleware ... overding on core handling after commenting Fruitcake\Cors\HandleCors::class middleware
-        'cors',
+        Cors::class
     ];
 
     /**
