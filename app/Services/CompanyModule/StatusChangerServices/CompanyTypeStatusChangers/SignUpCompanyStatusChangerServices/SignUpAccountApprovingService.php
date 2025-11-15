@@ -3,8 +3,8 @@
 namespace App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\SignUpCompanyStatusChangerServices;
 
 use App\Http\Requests\CompanyModule\SignupAccountApprovingRequest; 
-use PixelApp\Events\TenancyEvents\TenantCompanyEvents\TenantCompanyApproved; 
 use App\Models\CompanyModule\TenantCompany;
+use PixelApp\Events\TenancyEvents\TenantCompanyEvents\TenantCompanyApprovingEvents\ApprovedByAdminPanel;
 use PixelApp\Services\UserEncapsulatedFunc\EmailAuthenticatableFuncs\StatusChangeableStatusChangers\StatusChangerTypes\SignUpAccountStatusChangerServices\SignUpAccountApprovingService as BaseSignUpAccountApprovingService;
 
 /**
@@ -29,6 +29,6 @@ class SignUpAccountApprovingService extends BaseSignUpAccountApprovingService
      */
     protected function sendStatusChangingNotification(): void
     {  
-        event(new TenantCompanyApproved($this->model));
+        event(new ApprovedByAdminPanel($this->model));
     }
 }

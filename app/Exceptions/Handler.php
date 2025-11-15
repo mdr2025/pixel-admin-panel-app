@@ -40,5 +40,7 @@ class Handler extends ExceptionHandler
          $this->renderable(function (Exception $e, $request) {
              return Response::error($e->getMessage());
          });
+
+         //no need to define any reportable .... the default behavior is enough
     }
 }

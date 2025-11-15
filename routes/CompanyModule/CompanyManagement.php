@@ -5,7 +5,7 @@ use App\Models\UsersModule\User;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(CompanyManagementController::class)
-    // ->middleware("auth:api")    
+    ->middleware("auth:api")    
     ->prefix('company')->group(function () {
 
         //company general rotues

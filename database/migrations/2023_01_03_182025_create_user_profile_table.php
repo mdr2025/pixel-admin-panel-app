@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserProfileTable extends Migration
+return new class() extends Migration
 {
     /**
      * Run the migrations.
@@ -19,12 +19,9 @@ class CreateUserProfileTable extends Migration
             $table->string('picture')->nullable();
             $table->enum('marital_status' , UserProfile::MARTIAL_STATUSES)->nullable();
             $table->enum('military_status' , UserProfile::MILITARY_STATUSES)->nullable();
-            $table->date('date_of_birth')->nullable();
             $table->string('national_id_number')->nullable()->unique();
             $table->string('passport_number')->nullable()->unique();
-
-            $table->foreignId("country_id")->constrained("countries")->cascadeOnUpdate();
-            $table->foreignId("city_id")->nullable()->constrained("cities")->cascadeOnUpdate();
+            $table->foreignId("nationality_id")->constrained("countries")->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId("user_id")->unique()->constrained("users")->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
@@ -38,4 +35,4 @@ class CreateUserProfileTable extends Migration
     {
         Schema::dropIfExists('user_profile');
     }
-}
+};

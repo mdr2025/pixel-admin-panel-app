@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Models\UsersModule\User;
 
 return [
 
@@ -45,6 +45,7 @@ return [
          'api' => [
              'driver' => 'passport',
              'provider' => 'users',
+             'hash' => true
          ] 
     ],
 

@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
  
-use Illuminate\Database\Seeder;
-use PixelApp\CustomLibs\PixelCycleManagers\PixelAppBootingManagers\PixelAppBootingManager;
 use PixelApp\Database\Seeders\GeneralSeeders\BaseDropDownListModulesSeeder;
 use PixelApp\Database\Seeders\SystemConfigSeeders\RolesAndPermissionsSeeders\PermissionsSeeder;
 use PixelApp\Database\Seeders\SystemConfigSeeders\RolesAndPermissionsSeeders\RolesSeeder;
+use Illuminate\Database\Seeder;
+use PixelApp\CustomLibs\PixelCycleManagers\PixelAppBootingManagers\PixelAppBootingManager;
 
-class DatabaseSeeder extends Seeder
+class CompanyResetSeeder extends Seeder
 {
     /**
      * Seed the application's database.

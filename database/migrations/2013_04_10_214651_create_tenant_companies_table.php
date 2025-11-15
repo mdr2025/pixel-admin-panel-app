@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use PixelApp\Models\CompanyModule\TenantCompany;
 
-class CreateTenantCompaniesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,6 +19,9 @@ class CreateTenantCompaniesTable extends Migration
             $table->string("hashed_id");
             $table->string('company_id')->nullable();
             $table->string('name')->index();
+            $table->string('name_shortcut')->index();
+            $table->string('mobile' , 20)->index();
+            $table->string("email")->index();
             $table->string('domain')->nullable()->unique();
             $table->string('sector');
             $table->string('address')->nullable();
@@ -47,6 +50,6 @@ class CreateTenantCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('tenant_companies');
     }
-}
+};

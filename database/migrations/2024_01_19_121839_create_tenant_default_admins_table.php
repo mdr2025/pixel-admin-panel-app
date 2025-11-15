@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTenantDefaultAdminsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,6 +21,7 @@ class CreateTenantDefaultAdminsTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->string('mobile', 20);
+            $table->foreignId("nationality_id")->constrained("countries")->cascadeOnUpdate();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('verification_token')->nullable();
             $table->foreignId("company_id")->constrained("tenant_companies")->cascadeOnUpdate()->cascadeOnDelete();
@@ -37,4 +38,4 @@ class CreateTenantDefaultAdminsTable extends Migration
     {
         Schema::dropIfExists('tenant_default_admins');
     }
-}
+};

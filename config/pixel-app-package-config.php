@@ -1,38 +1,43 @@
 <?php
 
 use App\Models\CompanyModule\TenantCompany;
-use App\Models\UsersModule\User;
+use App\Models\UsersModule\User; 
 
- return array (
-  'pixel-app-type' => 'admin-panel-app',
-  'pixel-app-package-route-registrars' => 
-  array (
-    0 => 'PixelApp\\Routes\\RouteRegistrarTypes\\AuthenticationRoutesRegistrars\\CompanyAuthenticationAPIRoutesRegistrar',
-    1 => 'PixelApp\\Routes\\RouteRegistrarTypes\\AuthenticationRoutesRegistrars\\UserAuthenticationAPIRoutesRegistrar',
-    2 => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\AreasRouteRegistrar',
-    3 => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\BranchesRouteRegistrar',
-    4 => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\CitiesRouteRegistrar',
-    5 => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\CountriesRouteRegistrar',
-    6 => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\DepartmentRouteRegistrar',
-    7 => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\RolesAndPermissionsRouteRegistrar',
-    8 => 'PixelApp\\Routes\\RouteRegistrarTypes\\UserAccountRoutesRegistrars\\CompanyBranchesAPIRoutesRegistrar',
-    9 => 'PixelApp\\Routes\\RouteRegistrarTypes\\UserAccountRoutesRegistrars\\CompanyProfileAPIRoutesRegistrar',
-    10 => 'PixelApp\\Routes\\RouteRegistrarTypes\\UserAccountRoutesRegistrars\\CompanySettingsAPIRoutesRegistrar',
-    11 => 'PixelApp\\Routes\\RouteRegistrarTypes\\UserAccountRoutesRegistrars\\UserProfileAPIRoutesRegistrar',
-    12 => 'PixelApp\\Routes\\RouteRegistrarTypes\\UserAccountRoutesRegistrars\\UserSignatureAPIRoutesRegistrar',
-    13 => 'PixelApp\\Routes\\RouteRegistrarTypes\\UsersManagementRoutesRegistrars\\SignUpUsersAPIRoutesRegistrar',
-    14 => 'PixelApp\\Routes\\RouteRegistrarTypes\\UsersManagementRoutesRegistrars\\UsersAPIRoutesRegistrar',
-  ),
-  'pixel-macroable-extenders' => 
-  array (
-    0 => 'PixelApp\\PixelMacroableExtenders\\PixelBlueprintExtender',
-    1 => 'PixelApp\\PixelMacroableExtenders\\PixelBuilderExtender',
-    2 => 'PixelApp\\PixelMacroableExtenders\\PixelCarbonExtender',
-    3 => 'PixelApp\\PixelMacroableExtenders\\PixelHasManyExtender',
-    4 => 'PixelApp\\PixelMacroableExtenders\\PixelStrExtender',
-    5 => 'PixelApp\\PixelMacroableExtenders\\PixelReponseExtender',
-  ),
-  'pixel-tenancy-service-provider-class' => 'PixelApp\\ServiceProviders\\RelatedPackagesServiceProviders\\TenancyServiceProvider',
-  'tenant-company-model-class' => TenantCompany::class,
-  'user-model-class' => User::class
-) ;
+ return [
+          'pixel-app-type' => 'admin-panel-app',
+          "tenant-app-root-api" => "http://127.0.0.1:8000",
+          'pixel-app-package-route-registrars' => 
+          [
+            'company-auth' => 'PixelApp\\Routes\\RouteRegistrarTypes\\AuthenticationRoutesRegistrars\\CompanyAuthenticationAPIRoutesRegistrar',
+            'user-auth' => 'PixelApp\\Routes\\RouteRegistrarTypes\\AuthenticationRoutesRegistrars\\UserAuthenticationAPIRoutesRegistrar',
+            'normal-company-profile' => 'PixelApp\\Routes\\RouteRegistrarTypes\\CompanyAccountRouteRegistrars\\NormalCompanyAccountRouteRegistrars\\NormalCompanyProfileAPIRoutesRegistrar',
+            'normal-company-settings' => 'PixelApp\\Routes\\RouteRegistrarTypes\\CompanyAccountRouteRegistrars\\NormalCompanyAccountRouteRegistrars\\NormalCompanySettingsAPIRoutesRegistrar',
+            'tenant-company-profile' => 'PixelApp\\Routes\\RouteRegistrarTypes\\CompanyAccountRouteRegistrars\\TenantCompanyAccountRouteRegistrars\\TenantCompanyProfileAPIRoutesRegistrar',
+            'tenant-company-resources-configuring' => 'PixelApp\\Routes\\RouteRegistrarTypes\\CompanyAccountRouteRegistrars\\TenantCompanyAccountRouteRegistrars\\TenantCompanyResourcesConfiguringAPIRoutesRegistrar',
+            'tenant-company-setgtings' => 'PixelApp\\Routes\\RouteRegistrarTypes\\CompanyAccountRouteRegistrars\\TenantCompanyAccountRouteRegistrars\\TenantCompanySettingsAPIRoutesRegistrar',
+            'dropdown-list' => 
+            [
+              'areas' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\AreasRouteRegistrar',
+              'branches' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\BranchesRouteRegistrar',
+              'cities' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\CitiesRouteRegistrar',
+              'countries' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\CountriesRouteRegistrar',
+              'currencies' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\CurrenciesRouteRegistrar',
+              'departmens' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\DropdownListRouteRegistrars\\DepartmentRouteRegistrar',
+            ],
+            'packages' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\PackagesRouteRegistrar',
+            'roles-permissions' => 'PixelApp\\Routes\\RouteRegistrarTypes\\SystemConfigurationRouteRegistrars\\RolesAndPermissionsRouteRegistrar',
+            'user-profile' => 'PixelApp\\Routes\\RouteRegistrarTypes\\UserAccountRoutesRegistrars\\UserProfileAPIRoutesRegistrar',
+            'signup-users-management' => 'PixelApp\\Routes\\RouteRegistrarTypes\\UsersManagementRoutesRegistrars\\SignUpUsersAPIRoutesRegistrar',
+            'users-list-management' => 'PixelApp\\Routes\\RouteRegistrarTypes\\UsersManagementRoutesRegistrars\\UsersAPIRoutesRegistrar',
+          ],
+          /**
+             * it only will be used on tenancy supporter app only (not normal app)
+             * any alternative ServiceProvider must be a child class of 
+             * PixelApp\ServiceProviders\RelatedPackagesServiceProviders\TenancyServiceProvider
+             */
+            'pixel-tenancy-service-provider-class' => 'PixelApp\\ServiceProviders\\RelatedPackagesServiceProviders\\TenancyServiceProvider',
+
+            "tenant-company-model-class" => TenantCompany::class,
+            "user-model-class" => User::class
+            
+];

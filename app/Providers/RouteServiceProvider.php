@@ -5,9 +5,7 @@ namespace App\Providers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route; 
 use PixelApp\Routes\PixelRouteManager;
 
 class RouteServiceProvider extends ServiceProvider
@@ -38,18 +36,12 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
-
-        // Route::get("hello" , function()
-        // {
-        //     return response()->json(["Hello2"]);
-        // });
         $this->routes(function()
         {
             PixelRouteManager::loadAPIRoutes();   
             PixelRouteManager::loadWebRoutes();
             PixelRouteManager::loadPixelAppPackageRoutes();
-
-            PixelRouteManager::loadTenantRoutes();
+ 
         }); 
     }
 
@@ -61,23 +53,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            // if (app()->isLocal()) {
-            //     return Limit::none();
-            // }
-            $key = optional($request->user())->id ?: "Admin|"  . $request->ip() . $request->path();
-            return Limit::perMinute(60)->by($key);
-
-            
-            //  $key = optional($request->ip() . '|' . $request->path());
-            //  Log::info('Throttle key: ' . $key);
-            //  return Limit::perMinute(60)->by($key);
-
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: "Admin|"  . $request->ip());
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
-
-        // RateLimiter::for('admin-panel-safe', function (Request $request) {
-        //     return Limit::perMinute(1000)->by($request->ip());
-        // });
     } 
   
 }

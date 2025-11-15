@@ -1,5 +1,7 @@
 <?php
 
+use CustomFileSystem\CustomFileHandler;
+
 return [
 
     /*
@@ -13,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'front_separated'),
+    'default' => env('FILESYSTEM_DRIVER', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -32,8 +34,9 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app')
         ],
+
         'front_separated' => [
             /**
              * - Use it when frontend is separated from backend but both on the same server
@@ -48,7 +51,7 @@ return [
              * 3 - There is n differences between public and front_separated 's roots ... they will be used in the backend
              */
             'driver' => 'local',
-            'root' => storage_path('disks/public'),
+            'root' => storage_path('app/public'),
             'url' =>  rtrim(env('BACKEND_APP_URL') , "/") . '/public/storage',
             'visibility' => 'public',
 //            'driver' => 'local',
@@ -69,9 +72,14 @@ return [
              */
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' =>  rtrim(env('BACKEND_URL') , "/") .  '/storage' ,
+            'url' =>  rtrim(env('APP_URL') , "/") .  '/storage' ,
             'visibility' => 'public',
-        ], 
+//            'driver' => 'local',
+//            'root' => storage_path('app/public'),
+//            'url' =>  rtrim(env('APP_URL') , "/") .  '/storage' ,
+//            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -95,6 +103,7 @@ return [
             'visibility_handler' => null, // optional: set to \League\Flysystem\GoogleCloudStorage\UniformBucketLevelAccessVisibility::class to enable uniform bucket level access
             'metadata' => ['cacheControl'=> 'public,max-age=86400'], // optional: default metadata
         ]
+
     ],
 
     /*

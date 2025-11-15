@@ -3,11 +3,11 @@
 namespace App\Http;
  
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 use PixelApp\Http\Middleware\AliassedMiddlewares\Cors;
 use PixelApp\Http\Middleware\AliassedMiddlewares\ProtectFilesMidlleware;
 use PixelApp\Http\Middleware\AliassedMiddlewares\RateLimitingMiddleware;
 
-use Illuminate\Routing\Middleware\ThrottleRequests;
 class Kernel extends HttpKernel
 {
     /**
@@ -27,7 +27,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
 
         //custom middleware ... overding on core handling after commenting Fruitcake\Cors\HandleCors::class middleware
-        Cors::class
+        Cors::class,
     ];
 
     /**
@@ -82,5 +82,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'reqLimit' => RateLimitingMiddleware::class,
         'protectFile' => ProtectFilesMidlleware::class,
+        'client' => CheckClientCredentials::class
     ];
 }
