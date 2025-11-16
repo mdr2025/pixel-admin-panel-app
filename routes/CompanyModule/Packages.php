@@ -1,11 +1,13 @@
 <?php
 
-use App\Http\Controllers\CompanyModule\PackageController;
+use App\Http\Controllers\SafetyHubAdminPanel\WorkSector\CompanyManagementModule\PackageController;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(PackageController::class)->prefix('package')->group(function () {
-    Route::post('add', 'store');
-    Route::put('update', 'update');
-    Route::get('all', 'index');
-    Route::get('show/{id}', 'show');
-});
+Route::prefix('packages')
+    ->controller(PackageController::class)
+    ->group(function () {
+        Route::get('/', 'index');
+        Route::get('/{package}', 'show');
+        Route::post('/', 'store');
+        Route::put('/{package}', 'update');
+    });

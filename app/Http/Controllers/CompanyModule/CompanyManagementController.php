@@ -3,159 +3,263 @@
 namespace App\Http\Controllers\CompanyModule;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CompanyModule\DuplicateCompanyRequest;
+use App\Http\Requests\CompanyModule\ReadCompanyRequest;
+use App\Http\Resources\CompanyModule\CompaniesResource;
 use App\Models\CompanyModule\TenantCompany;
 use App\Models\UsersModule\User;
 use App\Services\CompanyModule\CompanyDefaultAdminServices\DefaultAdminVerificationNotificationResendingService;
 use App\Services\CompanyModule\CompanyDefaultAdminServices\TenantCompanyDefaultAdminEmailChangingService;
+use App\Services\CompanyModule\CompanyManagementService;
 use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\CompanyAccountStatusChanger;
 use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\SignUpCompanyStatusChangerServices\SignUpAccountApprovingService;
 use App\Services\CompanyModule\StatusChangerServices\CompanyTypeStatusChangers\SignUpCompanyStatusChangerServices\SignUpAccountRejectingService;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use PixelApp\Http\Resources\AuthenticationResources\CompanyAuthenticationResources\ModelsResources\TenantCompanyResource;
+use PixelApp\Models\CompanyModule\CompanyDefaultAdmin;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyManagementController extends Controller
 {
-    // function signupList(Request $request)
-    // {
 
-    //     $data = QueryBuilder::for(TenantCompany::class)->with('contacts')
-    //         ->allowedFilters([
-    //             AllowedFilter::callback('name', function (Builder $query, $value) {
-    //                     $query->where('first_name', 'like', "{$value}%")
-    //                         ->orWhere('last_name', 'like', "{$value}%")
-    //                         ->orWhere('admin_email', 'like', "{$value}%")
-    //                         ->orWhere('name', 'like', "{$value}%")
-    //                         ->orWhere('company_id', 'like', "{$value}%")
-    //                         ->orWhereHas('contacts', function ($query) use ($value) {
-    //                             $query->where('contact_No', 'like', "{$value}%");
-    //                     });
-    //                 }),
-    //             AllowedFilter::exact('first_name'),
-    //             AllowedFilter::exact('last_name'),
-    //             AllowedFilter::exact('admin_email'),
-    //             AllowedFilter::exact('status')
-    //         ])
-    //         ->where('status', 'pending')
-    //         ->when($request->has('filter.email_verified_at'), function ($query) use ($request) {
-    //             if ($request->input('filter.email_verified_at') == 'verified') {
-    //                 return $query->whereNotNull('email_verified_at');
-    //             } elseif ($request->input('filter.email_verified_at') == 'not verified') {
-    //                 return $query->whereNull('email_verified_at');
-    //             }
-    //         })
-    //         ->paginate($request->pageSize ?? 10);
-    //     // $statistics = $this->statistics(Company::class, $request, 'signup_requests');
-
-    //     return Response::success(['list' => $data, 'statistics' => []]);
-    // }
-
-    // function companyList(Request $request)
-    // { 
-    //     $data = QueryBuilder::for(TenantCompany::class)
-    //         ->with('contacts')
-    //         ->allowedFilters(
-    //             [
-    //                 AllowedFilter::callback('details', function (Builder $query, $value) {
-    //                     $query->where('first_name', 'like', "%" . $value . "%")
-    //                         ->orWhere('last_name', 'like', "%" . $value . "%")
-    //                         ->orWhere('admin_email', 'like', "%" . $value . "%")
-    //                         ->orWhere('name', 'like', "%" . $value . "%")
-    //                         ->orWhere('company_id', 'like', "%" . $value . "%")
-    //                         ->orWhereHas('contacts', function ($query) use ($value) {
-    //                             $query->where('contact_No', 'like', "%" . $value . "%");
-    //                         });
-    //                 }),
-    //                 'first_name',
-    //                 'last_name',
-    //                 'admin_email',
-    //                 'status',
-    //                 // 'country.name',
-    //                 'branches_no',
-    //                 'domain',
-    //                 'package_status'
-    //             ]
-    //         )
-    //         ->isApproved()
-    //         ->paginate($request->pageSize ?? 10);
-    //     // $statistics = $this->statistics(Company::class, $request, 'signup_requests');
-
-    //     return Response::success(['list' => $data, 'statistics' => []]);
-    // }
-
-    public function approveComapny(int $companyId) : JsonResponse
+    public function __construct(private CompanyManagementService $companyManagementService)
     {
-        return (new SignUpAccountApprovingService($companyId))->change();
+        
     }
 
-    public function rejectCompany(int $companyId) : JsonResponse
+    public function index(ReadCompanyRequest $request)
     {
-        return (new SignUpAccountRejectingService($companyId))->change();
+         return $this->logOnFailureOnly(
+                    callback : function()
+                                {
+            
+                                    return $this->companyManagementService->index();
+
+                                },
+                    operationName : "Tenant Companies Indexing Operation",
+                    loggingFailingMsg : "Failed to index tenant companies !"
+                );
     }
 
-    function changeCompanyListStatus(int $companyId): JsonResponse
+    public function list(ReadCompanyRequest $request)
     {
-        return (new CompanyAccountStatusChanger($companyId))->change();
+          return $this->logOnFailureOnly(
+                    callback : function()
+                                {
+                                    $data = $this->companyManagementService->list();
+                                    
+                                    return CompaniesResource::collection($data);
+                                },
+                    operationName : "Tenant Companies Listing Operation",
+                    loggingFailingMsg : "Failed to list tenant companies !"
+                 );
+    }
+
+    public function show(int $company)
+    { 
+        return $this->logOnFailureOnly(
+            callback : function() use ($company)
+                        {
+    
+                            return $this->companyManagementService->show($company);
+
+                        },
+            operationName : "Tenant Company Show Operation",
+            loggingContext  : ['companyId' => $company],
+            loggingFailingMsg : "Failed To Retreive a Tenant Company Row !"
+        );
+    }
+ 
+    public function hide(int $company) : JsonResponse
+    {
+        return $this->surroundWithTransaction(
+            
+            function () use ($company): JsonResponse 
+            {
+                if ($this->companyManagementService->hide($company))
+                {
+                    return Response::success([], "Deleted Successfully");
+                }
+
+                return Response::error("Failed to delete company");
+            },
+            'Company Hiding Operation',
+            [
+                'user_id' => auth()->id(),
+                'request' => request()->all(),
+            ]
+        );
+    }
+
+    public function delete(int $company) : JsonResponse
+    {
+        return $this->surroundWithTransaction(
+            
+            function () use ($company): JsonResponse 
+            {
+                
+                if ($this->companyManagementService->delete($company))
+                {
+                    return Response::success([] , "Deleted Successfully");
+                }
+
+                return Response::error("Failed to delete company");
+
+            },
+            'Company Deleting Operation',
+            [
+                'user_id' => auth()->id(),
+                'request' => request()->all(),
+            ]
+        );
+    }
+
+    public function duplicate(DuplicateCompanyRequest $request, int $company)
+    {
+        return $this->surroundWithTransaction(
+                    function () use ($request, $company): JsonResponse
+                    {
+                        $this->companyManagementService->duplicate($company, $request->all());
+
+                        return Response::success([] , "Duplicated Successfully");
+                    },
+                    'Tenant Company Duplicating Operation',
+                    [
+                        'user_id' => auth()->id(),
+                        'request' => request()->all(),
+                    ]
+               );
     }
   
-    public function show(int $companyId)
-    { 
-        $tenant = TenantCompany::findOrFail($companyId);
-        return (new TenantCompanyResource($tenant ));
-
-        // $token = $request->bearerToken();
-        // $item = TenantCompany::with( 'country')->where('verification_token' , $token)->get();
-        // return new SingleResource($item);
-    }
-
-    public function hide($companyId)
+    public function approveComapny(Request $request , int $company) : JsonResponse
     {
-        $company = TenantCompany::findOrFail($companyId);
-        $company->delete();
-
-        $response = [
-            "message" => "Deleted Successfully",
-            "status" => "success"
-        ];
-        return response()->json($response, 200);
+         return $this->surroundWithTransaction(
+                        function () use ( $company): JsonResponse
+                        {
+                            return $this->companyManagementService->approveComapny($company);
+                        },
+                        'Approving a tenant company', 
+                        [
+                            'companyId' => $company,
+                            'user_id' => auth()->id(),
+                            'request' => $request->all(),
+                        ]
+                );
     }
 
-    public function delete($companyId)
+    public function rejectCompany(Request $request , int $company) : JsonResponse
     {
-        $company = TenantCompany::withTrashed()->find($companyId)->forceDelete();
-
-        $response = [
-            "message" => "Deleted Successfully",
-            "status" => "success"
-        ];
-        return response()->json($response, 200);
+        return $this->surroundWithTransaction(
+                        function () use ( $company): JsonResponse
+                        {
+                            return $this->companyManagementService->rejectCompany($company);
+                        },
+                        'Rejecting a Tenant', 
+                        [
+                            'companyId' => $company,
+                            'user_id' => auth()->id(),
+                            'request' => $request->all(),
+                        ]
+               );
     }
 
-    // public function duplicate(CompanyRequest $request, $id)
-    // {
-    //     $data = $request->all();
-    //     $recored = TenantCompany::find($id);
-    //     $copy = $recored->replicate()->fill($data);
-    //     $copy->save();
-
-    //     $response = [
-    //         "message" => "duplicated Successfully",
-    //         "status" => "success"
-    //     ];
-    //     return response()->json($response, 200);
-    // }
-
-   function updateCompanyEmail(int $companyId): JsonResponse
+   public function changeCompanyListStatus(Request $request , int $company): JsonResponse
    {
-       return (new TenantCompanyDefaultAdminEmailChangingService($companyId))->change(); 
+     return $this->surroundWithTransaction(
+                function () use ( $company): JsonResponse
+                {
+                    return $this->companyManagementService->changeCompanyListStatus($company);
+                },
+                'Updating Tenant Company List Status', 
+                [
+                    'companyId' => $company,
+                    'user_id' => auth()->id(),
+                    'request' => $request->all(),
+                ]
+            );
    }
 
-   function resendDefaultAdminEmailVerification(int $companyId): JsonResponse
+   public function updateCompanyEmail(Request $request, int $company)
    {
-        return (new DefaultAdminVerificationNotificationResendingService($companyId))->resend();
+        return $this->surroundWithTransaction(
+                    function () use ( $company): JsonResponse
+                    {
+                        return $this->companyManagementService->updateCompanyEmail($company);
+                    },
+                    'Updating Company Email',
+                    [
+                        'user_id' => auth()->id(),
+                        'request' => $request->all(),
+                    ]
+                );
    }
+
+   
+    public function resendVerificationTokenToDefaultAdminEmail(int $company): JsonResponse
+    {
+        return $this->surroundWithTransaction(
+                        function () use ($company)
+                        {
+
+                            return $this->companyManagementService->resendVerificationTokenToDefaultAdminEmail($company);
+                        },
+                        'Resend Verification Token to Default Admin Email',
+                        [
+                            'user_id' => auth()->id(),
+                            'request' => request()->all(),
+                        ]
+                );
+    }
+
+    public function reVerifyEmail(CompanyDefaultAdmin $defaultAdmin): JsonResponse
+    {
+        return $this->surroundWithTransaction(
+                        
+                        function() use ($defaultAdmin)
+                        {
+                            return $this->companyManagementService->reVerifyEmail($defaultAdmin);
+                        },
+                        "ReVerify Tenant Default Admin's Email", 
+                        [
+                            'user_id' => auth()->id(),
+                            'request' => request()->all(),
+                        ]
+
+                );
+    } 
+
+    public function signupList(Request $request)
+    {
+        return $this->logOnFailureOnly(
+                    callback : function() use ($request)
+                                {
+
+                                    return $this->companyManagementService->getSignupList($request);
+
+                                },
+                    operationName : "Signup Companies List Fetching Operation",
+                    loggingFailingMsg : "Failed to fetch Signup tenant list !"
+                );
+    }
+
+    public function companyList(Request $request)
+    {
+        return $this->logOnFailureOnly(
+                    callback : function() use ($request)
+                                {
+
+                                    return $this->companyManagementService->getCompanyList($request);
+
+                                },
+                    operationName : "Company List Fetching Operation",
+                    loggingFailingMsg : "Failed to fetch tenant company List !"
+                );
+    }
+
 }

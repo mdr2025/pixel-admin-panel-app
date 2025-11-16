@@ -4,59 +4,88 @@ namespace App\Http\Controllers\CompanyModule;
 
 use App\Http\Controllers\Controller;
 use App\Models\CompanyModule\Package;
-use AuthorizationManagement\PolicyManagement\Policies\BasePolicy; 
-use PixelApp\Helpers\PixelGlobalHelpers;
-use Spatie\QueryBuilder\QueryBuilder;
+use App\Services\CompanyModule\PackageServices\PackageService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class PackageController extends Controller
-{
-    function index()
+{ 
+
+    public function __construct(private PackageService $packageService)
     {
-        $fillableAttributes = (new Package())->getFillable();
-        $data = QueryBuilder::for(Package::class)
-            ->allowedFilters($fillableAttributes)
-            ->with('countryPackages:id,monthly_price,annual_price')
-            ->paginate(request()->pageSize ?? 10);
-        // $statistics = $this->statistics(Company::class, $request, 'companies');
-        return response()->success([
-            'list' => $data,
-            // 'statistics' => $statistics
-        ]);
-        $packages = Package::with('countryPackages:id,monthly_price,annual_price')->get();
-        return response()->json([
-            "data" => $packages
-        ]);
-    }
-    function list()
-    {
-        $packages = Package::get(['id', 'name']);
-        return response()->json([
-            "data" => $packages
-        ]);
-    }
-    function store(PackageRequest $request)
-    {
-        BasePolicy::check('create', Package::class);
-        $package = Package::create($request->all());
-        return response()->json([
-            "data" => $package
-        ]);
     }
 
-    function show($id)
+    public function index(Request $request): JsonResponse
     {
-        $package = Package::find($id) ?? PixelGlobalHelpers::notfound();
-        return response()->json([
-            "data" => $package
-        ]);
+        return $this->surroundWithTransaction(
+            fn(): JsonResponse => response()->json($this->packageService->getPackages()),
+            'Package Listing',
+            [
+                'user_id' => auth()->id(),
+                'request' => $request->all(),
+            ]
+        );
     }
 
-    function update(PackageRequest $request)
+    public function list(): JsonResponse
     {
-        $package = Package::find($request->id)
-            ->update($request->all());
-        return response()->json([
-            "data" => $package
-        ]);
+        return $this->surroundWithTransaction(function () {
+            $total = $this->packageService->getCountPackages();
+            $data = $this->packageService->getListPackages();
+            return Response::successList($total, $data);
+        }, 'Package List', ['user_id' => auth()->id(), 'request' => request()->all()]);
     }
+
+    public function show(Package $package): JsonResponse
+    {
+        return $this->surroundWithTransaction(
+            fn(): JsonResponse => Response::success($this->packageService->show($package)),
+            'Package Showing',
+            [
+                'user_id' => auth()->id(),
+                'request' => request()->all(),
+            ]
+        );
+    }
+
+
+
+    public function store(PackageRequest $request): JsonResponse
+    {
+        return $this->surroundWithTransaction(
+            function () use ($request): JsonResponse {
+                $package = $this->packageService->store($request->validated());
+                return Response::success($package, 'Package has been created successfully');
+            },
+            'Package Creation',
+            [
+                'user_id' => auth()->id(),
+                'request' => $request->validated(),
+            ]
+        );
+    }
+
+    public function update(PackageRequest $request, Package $package): JsonResponse
+    {
+        return $this->surroundWithTransaction(
+            function () use ($request, $package): JsonResponse {
+                $updated = $this->packageService->update($package, $request->validated());
+
+                if ($updated) {
+                    $package->refresh();
+                    return Response::success($package, 'Package has been updated successfully');
+                }
+
+                return Response::error('Failed to update package', 500);
+            },
+            'Package Update',
+            [
+                'user_id' => auth()->id(),
+                'package_id' => $package->id,
+                'request' => $request->validated(),
+            ]
+        );
+    }
+
 }

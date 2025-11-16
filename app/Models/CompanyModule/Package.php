@@ -3,21 +3,17 @@
 namespace App\Models\CompanyModule;
 
 use App\Models\BaseModel;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory; 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Package extends BaseModel
 {
     use HasFactory;
-    // protected $fillable = [
-    //     'name',
-    //     'show',
-    //     'monthly_price',
-    //     'annual_price',
-    //     'monthly_discount',
-    //     'annual_discount',
-    //     'privileges'
-    // ];
+
+    # TABLE NAME
+    protected $table = 'packages';
+
+    # FILLABLE ATTRIBUTES
     protected $fillable = [
         'name',
         'description',
@@ -37,8 +33,10 @@ class Package extends BaseModel
         'products_count',
     ];
 
-    public function countryPackages()
+    # START RELATIONS
+    public function countryPackages(): HasMany
     {
-        return $this->hasMany(CountryPackage::class);
+        return $this->hasMany(CountryPackage::class, 'package_id', 'id');
     }
+    # END RELATIONS
 }

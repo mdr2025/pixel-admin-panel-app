@@ -2,8 +2,8 @@
 
 namespace App\Models\CompanyModule;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Factories\HasFactory; 
 
 class CompanyAdditionalPackage extends BaseModel
 {
