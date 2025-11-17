@@ -262,4 +262,42 @@ class CompanyManagementController extends Controller
                 );
     }
 
+
+
+
+
+
+    /**
+     * Referance code
+     */
+//  public function importCompanies(Request $request)
+//     {
+//         try {
+//             BasePolicy::check('create', Company::class);
+//             $file = $this->excel->importFile($request);
+//             return response()->json(['message' => 'Companies imported successfully', 'file' => $file]);
+//         } catch (\Exception $e) {
+//             Log::error("Company Import Failed: " . $e->getMessage());
+//             return response()->json(['message' => 'Failed to import companies'], 500);
+//         }
+//     }
+
+//     public function exportCompanies(Request $request)
+//     {
+//         try {
+//             BasePolicy::check('read', Company::class);
+//             $file = $this->excel->exportFile($request);
+//             return response()->json(['message' => 'Companies exported successfully', 'file' => $file]);
+//         } catch (\Exception $e) {
+//             Log::error("Company Export Failed: " . $e->getMessage());
+//             return response()->json(['message' => 'Failed to export companies'], 500);
+//         }
+//     }
+
+
+
+
+
+
+
 }

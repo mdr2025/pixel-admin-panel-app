@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use PixelApp\Http\Resources\AuthenticationResources\CompanyAuthenticationResources\ModelsResources\TenantCompanyResource;
 use PixelApp\Models\CompanyModule\CompanyDefaultAdmin;
-use PixelApp\Models\ModelConfigs\TenantCompanyConfig;
+use App\Models\ModelConfigs\TenantCompanyConfig;
 
 class CompanyManagementService
 {

@@ -1,6 +1,6 @@
 <?php 
 
-namespace PixelApp\Models\ModelConfigs;
+namespace App\Models\ModelConfigs;
 
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;

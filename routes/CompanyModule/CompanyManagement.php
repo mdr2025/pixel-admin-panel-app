@@ -11,7 +11,7 @@ Route::middleware("auth:api")
         //Route::get("/" , [CompanyManagementController::class , 'index']); // to check if it is needed later
         //Route::get('list', [CompanyManagementController::class , 'list']); // to check if it is needed later
         Route::get('show/{company}', [CompanyManagementController::class , 'show']);
-        Route::get('company-default-admin/re-verify-email/{company}', [CompanyManagementController::class ,'resendDefaultAdminEmailVerification']);
+        Route::get('company-default-admin/re-verify-email/{company}', [CompanyManagementController::class ,'resendVerificationTokenToDefaultAdminEmail']);
         Route::put('updateEmail/{company}', [CompanyManagementController::class ,'updateCompanyEmail']);
         Route::delete('hide/{company}', [CompanyManagementController::class ,'hide']); //soft deleting route
         // Route::get('hidden-list', 'companyHiddenList');

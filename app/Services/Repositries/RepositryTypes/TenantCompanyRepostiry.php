@@ -27,22 +27,36 @@ class TenantCompanyRepostiry implements TenantCompanyRepostiryInterface
         return $query->paginate($request->pageSize ?? 10);
     }
 
+    private function getEmailVerificationConditinalParameters(Request $request) : array
+    {
+        $verificationColumn = 'email_verified_at';
+        $verificationDefaultStatus = 'verified';
+        $status = $request->input('filter.email_verified_at')  ?? $verificationDefaultStatus;
+         
+        if($status == 'unverified')
+        {
+            return [$verificationColumn , null];
+        }
+
+        return [$verificationColumn , "!=" , null];
+    }
+
     private function applyEmailVerificationFilter($query, Request $request) 
     {
-        $status = $request->input('filter.email_verified_at');
+        $verificationConditinalParams = $this->getEmailVerificationConditinalParameters($request);
 
-        if($status == 'verified')
+        $query->whereHas("defaultAdmin" , function($relation) use ( $verificationConditinalParams )
         {
-            $query->whereNotNull('email_verified_at');
-            return ;
-        }
-    
-        $query->whereNull('email_verified_at');
+            $relation->where( ...$verificationConditinalParams );
+        });
     }
 
 
     public function getCompanyList(array $filters = [], Request $request) 
     {
+        /**
+         * @todo why verification condition is not applied here ?
+         */
         return $this->initTenantCompanyQueryBuilder()
                     ->with('contacts')
                     ->allowedFilters(
