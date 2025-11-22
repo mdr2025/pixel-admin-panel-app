@@ -90,30 +90,7 @@ class CompanyManagementService
         return (new DefaultAdminVerificationNotificationResendingBaseService())->setAuthenticatable($defaultAdmin)->resend();
     }
 
-    public function hide(int $companyId) : bool
-    {
-        $company = $this->findByIdOrFail($companyId);
-        return $this->initTenantCompanyManagementRepostiry()->hide($company);
-    }
-
-    public function delete(int $companyId)
-    {
-        $company = $this->initTenantCompanyManagementRepostiry()->findEvenTrashed($companyId);
-        return $this->initTenantCompanyManagementRepostiry()->delete($company);
-    }
-
-    public function duplicate(int $companyId, array $data): array
-    {
-        $company = $this->findByIdOrFail($companyId);
-        $this->initTenantCompanyManagementRepostiry()->duplicate($company, $data);
-
-        return [
-            'message' => "duplicated Successfully",
-            'status' => "success"
-        ];
-    }
-
-    public function approveComapny(int $companyId) : JsonResponse
+    public function approveCompany(int $companyId) : JsonResponse
     {
         return (new SignUpAccountApprovingService($companyId))->change();
     }

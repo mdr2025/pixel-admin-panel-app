@@ -75,74 +75,13 @@ class CompanyManagementController extends Controller
             loggingFailingMsg : "Failed To Retreive a Tenant Company Row !"
         );
     }
- 
-    public function hide(int $company) : JsonResponse
-    {
-        return $this->surroundWithTransaction(
-            
-            function () use ($company): JsonResponse 
-            {
-                if ($this->companyManagementService->hide($company))
-                {
-                    return Response::success([], "Deleted Successfully");
-                }
-
-                return Response::error("Failed to delete company");
-            },
-            'Company Hiding Operation',
-            [
-                'user_id' => auth()->id(),
-                'request' => request()->all(),
-            ]
-        );
-    }
-
-    public function delete(int $company) : JsonResponse
-    {
-        return $this->surroundWithTransaction(
-            
-            function () use ($company): JsonResponse 
-            {
-                
-                if ($this->companyManagementService->delete($company))
-                {
-                    return Response::success([] , "Deleted Successfully");
-                }
-
-                return Response::error("Failed to delete company");
-
-            },
-            'Company Deleting Operation',
-            [
-                'user_id' => auth()->id(),
-                'request' => request()->all(),
-            ]
-        );
-    }
-
-    public function duplicate(DuplicateCompanyRequest $request, int $company)
-    {
-        return $this->surroundWithTransaction(
-                    function () use ($request, $company): JsonResponse
-                    {
-                        $this->companyManagementService->duplicate($company, $request->all());
-
-                        return Response::success([] , "Duplicated Successfully");
-                    },
-                    'Tenant Company Duplicating Operation',
-                    [
-                        'user_id' => auth()->id(),
-                        'request' => request()->all(),
-                    ]
-               );
-    }
   
-    public function approveComapny(Request $request , int $company) : JsonResponse
+    public function approveCompany(Request $request , int $company) : JsonResponse
     {
          return $this->surroundWithTransaction(
                         function () use ( $company): JsonResponse
                         {
-                            return $this->companyManagementService->approveComapny($company);
+                            return $this->companyManagementService->approveCompany($company);
                         },
                         'Approving a tenant company', 
                         [

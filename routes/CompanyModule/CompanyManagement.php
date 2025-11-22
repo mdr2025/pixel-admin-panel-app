@@ -13,13 +13,10 @@ Route::middleware("auth:api")
         Route::get('show/{company}', [CompanyManagementController::class , 'show']);
         Route::get('company-default-admin/re-verify-email/{company}', [CompanyManagementController::class ,'resendVerificationTokenToDefaultAdminEmail']);
         Route::put('updateEmail/{company}', [CompanyManagementController::class ,'updateCompanyEmail']);
-        Route::delete('hide/{company}', [CompanyManagementController::class ,'hide']); //soft deleting route
-        // Route::get('hidden-list', 'companyHiddenList');
-        Route::delete('delete/{company}', [CompanyManagementController::class , 'delete']); // force deleting route
 
         //signup list routes
         Route::get('signup-list', [CompanyManagementController::class ,'signupList']);
-        Route::put('signup-list/approve/{company}',  [CompanyManagementController::class ,'approveComapny' ]);
+        Route::put('signup-list/approve/{company}',  [CompanyManagementController::class ,'approveCompany' ]);
         Route::put('signup-list/reject/{company}',  [CompanyManagementController::class , 'rejectCompany' ]);
 
 

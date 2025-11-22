@@ -182,7 +182,7 @@ return [
      * enabled. But it may be useful to disable them if you use external
      * storage (e.g. S3 / Dropbox) or have a custom asset controller.
      */
-    'routes' => true,
+    'routes' => false,
 
     /**
      * Parameters used by the tenants:migrate command.
@@ -198,6 +198,6 @@ return [
      */
     'seeder_parameters' => [
         '--class' => 'TenantDatabaseSeeder', // root seeder class
-        '--force' => true,
+                 // '--force' => true, // This needs to be true to seed tenant databases in production
     ],
 ];

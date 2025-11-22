@@ -83,40 +83,6 @@ class TenantCompanyRepostiry implements TenantCompanyRepostiryInterface
                     ->get(['id' , "name" , "company_id"]);
     }
 
-    /**
-     * Soft deleting method
-     */
-    public function hide(TenantCompany $company) : bool
-    {
-        return $company->delete();
-    }
-
-    public function findEvenTrashed(int $companyId) : ?TenantCompany
-    {
-        return TenantCompany::withTrashed()->where("id" , $companyId)->first();
-    }
-    public function delete(TenantCompany $company)
-    {
-        /**
-         * @todo to ask
-         */
-        //temprary
-        return true;
-        return $company->forceDelete();
-    }
-
-    public function duplicate(TenantCompany $company, array $data)
-    {
-         /**
-         * @todo to ask
-         */
-        //temprary
-        return true;
-
-        $copy = $company->replicate()->fill($data);
-        return $copy->save();
-    }
-
     public function getCompanyByEmail(string $email)
     {
         return TenantCompany::whereAdminEmail($email)->first();
